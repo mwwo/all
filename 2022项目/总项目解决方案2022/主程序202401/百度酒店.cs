@@ -1,17 +1,21 @@
-﻿using System;
+﻿using myDLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using myDLL;
 
 namespace 主程序202401
 {
@@ -24,31 +28,144 @@ namespace 主程序202401
         Thread thread;
         private void button1_Click(object sender, EventArgs e)
         {
-            #region 通用检测
-
-
-            string html = method.GetUrl("http://www.acaiji.com/index/index/vip.html", "utf-8");
-
-            if (!html.Contains(@"u7WSe"))
-            {
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-                return;
-            }
-
-           
-
-            #endregion
-            status = true;
-            if (thread == null || !thread.IsAlive)
-            {
-                thread = new Thread(run);
-                thread.Start();
-                Control.CheckForIllegalCrossThreadCalls = false;
-            }
+            cloud189("");
+            //status = true;
+            //if (thread == null || !thread.IsAlive)
+            //{
+            //    thread = new Thread(run);
+            //    thread.Start();
+            //    Control.CheckForIllegalCrossThreadCalls = false;
+            //}
         }
 
+        #region GET请求带COOKIE
+        public static string GetUrlWithCookie(string Url, string COOKIE, string charset)
+        {
+            string result;
+            try
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+                request.AllowAutoRedirect = true;
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36";
+               
+                request.Headers.Add("Cookie", COOKIE);
+                request.Headers.Add("Accept-Encoding", "gzip");
+                request.KeepAlive = true;
+                request.Accept = "application/json";
+                request.Timeout = 5000;
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                bool flag = response.Headers["Content-Encoding"] == "gzip";
+                string html;
+                if (flag)
+                {
+                    GZipStream gzip = new GZipStream(response.GetResponseStream(), CompressionMode.Decompress);
+                    StreamReader reader = new StreamReader(gzip, Encoding.GetEncoding(charset));
+                    html = reader.ReadToEnd();
+                    reader.Close();
+                }
+                else
+                {
+                    StreamReader reader2 = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(charset));
+                    html = reader2.ReadToEnd();
+                    reader2.Close();
+                }
+                response.Close();
+                result = html;
+            }
+            catch (WebException ex)
+            {
+                result = ex.ToString();
+
+            }
+            return result;
+        }
+        #endregion
 
 
+
+        #region 天翼云请求
+        private static string Request_cloud_189_cn(string url,string cookie)
+        {
+          
+
+            try
+            {
+                string charset= "utf-8";    
+                string result;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+                request.KeepAlive = true;
+                request.Headers.Add("sec-ch-ua-platform", @"""Windows""");
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
+                request.Accept = "application/json;charset=UTF-8";
+                request.Headers.Add("sec-ch-ua", @"""Chromium"";v=""140"", ""Not=A?Brand"";v=""24"", ""Google Chrome"";v=""140""");
+                request.Headers.Add("Sign-Type", @"1");
+                request.Headers.Add("sec-ch-ua-mobile", @"?0");
+                request.Headers.Add("Sec-Fetch-Site", @"same-origin");
+                request.Headers.Add("Sec-Fetch-Mode", @"cors");
+                request.Headers.Add("Sec-Fetch-Dest", @"empty");
+                request.Referer = "https://cloud.189.cn/web/main/file/folder/-11";
+
+                request.Headers.Set(HttpRequestHeader.Cookie, cookie);
+
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                bool flag = response.Headers["Content-Encoding"] == "gzip";
+                string html;
+                if (flag)
+                {
+                    GZipStream gzip = new GZipStream(response.GetResponseStream(), CompressionMode.Decompress);
+                    StreamReader reader = new StreamReader(gzip, Encoding.GetEncoding(charset));
+                    html = reader.ReadToEnd();
+                    reader.Close();
+                }
+                else
+                {
+                    StreamReader reader2 = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(charset));
+                    html = reader2.ReadToEnd();
+                    reader2.Close();
+                }
+                response.Close();
+                result = html;
+
+                return result;
+            }
+            catch (WebException e)
+            {
+                return "";
+            }
+     
+        }
+
+        #endregion
+        #region  云盘下载
+
+        public  string cloud189(string link)
+        {
+            try
+            {
+                /* string cloud_cookie = File.ReadAllText(Server.MapPath("~/") + "cookie.txt").Trim(); */
+                ;
+                string fileId = "725321217015532937";
+                string url = "https://cloud.189.cn/api/open/file/getFileDownloadUrl.action?noCache=0.4189543716734623&fileId=" + fileId;
+                string cookie = "chinatelecomdata2015jssdkcross=%7B%22distinct_id%22%3A%22MTk3ODcxY2EwM2ZjNjEtMGZiNDQ5ZTJhNDdjNzM4LTI2MDExZTUxLTM2ODY0MDAtMTk3ODcxY2EwNDAyMmI5%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E8%87%AA%E7%84%B6%E6%90%9C%E7%B4%A2%E6%B5%81%E9%87%8F%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC%22%2C%22%24latest_referrer%22%3A%22https%3A%2F%2Fwww.baidu.com%2F%22%2C%22_latest_utm_ch%22%3A%22100003%22%7D%2C%22login_type%22%3A%22%22%2C%22utms%22%3A%7B%7D%2C%22latest_utms%22%3A%7B%22_latest_utm_ch%22%3A%22100003%22%7D%2C%22%24device_id%22%3A%22197871ca03fc61-0fb449e2a47c738-26011e51-3686400-197871ca04022b9%22%7D; zhizhendata2015jssdkcross=%7B%22distinct_id%22%3A%22MTk3ODcxY2VlMWZiZTYtMDUyODNlNWRmOGQ2MTItMjYwMTFlNTEtMzY4NjQwMC0xOTc4NzFjZWUyMDJiMTU%3D%22%2C%22first_id%22%3A%22%22%2C%22props%22%3A%7B%7D%2C%22login_type%22%3A%22%22%2C%22utms%22%3A%7B%7D%2C%22%24device_id%22%3A%22197871cee1fbe6-05283e5df8d612-26011e51-3686400-197871cee202b15%22%7D; JSESSIONID=E24EDE7FA3E9162F82584D652CF13556; COOKIE_LOGIN_USER=90D3A9A6F2664FB7FDB5AE176BB5A4DB6C0DDE3A7E1E9CDFCC12365279199358DE5E617AA20490279857DD29A2B20BAE878A4A2319EA37A9D5BCC0AF";
+                string html = Request_cloud_189_cn(url, cookie);
+
+                string fileurl = Regex.Match(html, @"""fileDownloadUrl"":""([\s\S]*?)""").Groups[1].Value.Trim();
+                MessageBox.Show(html);
+                textBox1.Text = fileurl;
+                return fileurl;
+            }
+            catch (Exception ex)
+            {
+
+                return "";
+            }
+
+
+        }
+
+        #endregion
         bool zanting = true;
         bool status = true;
         public void run()

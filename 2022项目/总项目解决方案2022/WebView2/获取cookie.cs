@@ -177,6 +177,7 @@ namespace WebView2
         {
            string ticket = await GetHttpOnlyCookieValueAsync("https://www.zxxk.com/", "xk.passport.ticket.v2");
 
+
             cookies = "xk.passport.ticket.v2=" + ticket;
            while (ticket != null)  
             {
@@ -196,6 +197,8 @@ namespace WebView2
             timer1.Interval = Convert.ToInt32(textBox1.Text.Trim()) * 60 * 1000;
             webView21.NavigationCompleted += WebView2_NavigationCompleted;
             webView21.Source = new System.Uri("https://sso.zxxk.com/login");
+           
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -375,5 +378,14 @@ namespace WebView2
                 e.Cancel = true;//点取消的代码 
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+
+
+       
     }
 }

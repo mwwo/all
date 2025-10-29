@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualBasic;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using QRCoder;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -31,17 +34,18 @@ namespace 视频号
 
         private void 视频号管理_Load(object sender, EventArgs e)
         {
-
+            createQRcode(); 
+            timer3.Interval = Convert.ToInt32(textBox1.Text)*1000;
         }
 
-        //public static string constr = "Host=115.190.168.152;Database=sph;Username=root;Password=eM2bN0mE4lD2";
+        public static string constr = "Host=115.190.168.152;Database=sph;Username=root;Password=eM2bN0mE4lD2";
 
-        // public static string constr = "Host=1.15.140.126;Database=sph;Username=root;Password=eM2bN0mE4lD2";
+         //public static string constr = "Host=1.15.140.126;Database=sph;Username=root;Password=eM2bN0mE4lD2";
         //public static string constr = "Host=115.190.176.30;Database=sph;Username=root;Password=eM2bN0mE4lD2";
         //public static string constr = "Host=115.190.166.221;Database=sph;Username=root;Password=eM2bN0mE4lD2";
 
         //public static string constr = "Host=1.117.225.132;Database=sph;Username=root;Password=eM2bN0mE4lD2";
-        public static string constr = "Host=110.40.191.114;Database=sph;Username=root;Password=eM2bN0mE4lD2";
+        //public static string constr = "Host=110.40.191.114;Database=sph;Username=root;Password=eM2bN0mE4lD2";
         // 存储已显示的数据ID，用于判断是否为新增项
         private HashSet<string> existingIds = new HashSet<string>();
         public void run()
@@ -453,6 +457,73 @@ namespace 视频号
             {
                 MessageBox.Show("请选择一行数据");
             }
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            createQRcode();
+        }
+
+
+
+        /// <summary>
+        /// 获取时间戳
+        /// </summary>
+        /// <returns></returns>
+        private static long GetTimestamp()
+        {
+            return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+        }
+
+        private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler
+        {
+            UseCookies = true,
+            AllowAutoRedirect = true,
+            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+        });
+        public void createQRcode()
+        {
+            var loginUrl = "https://channels.weixin.qq.com/cgi-bin/mmfinderassistant-bin/auth/auth_login_code";
+            var timestamp = GetTimestamp();
+
+            var formData = new FormUrlEncodedContent(new[]
+            {
+                    new KeyValuePair<string, string>("timestamp", timestamp.ToString()),
+                    new KeyValuePair<string, string>("_log_finder_id", "null"),
+                    new KeyValuePair<string, string>("rawKeyBuff", "null")
+                });
+
+            var response = _httpClient.PostAsync(loginUrl, formData).Result;
+            var responseJson = response.Content.ReadAsStringAsync().Result;
+            var json = JObject.Parse(responseJson);
+
+            var token = json["data"]["token"].ToString();
+
+            var qrCodeUrl = $"https://channels.weixin.qq.com/mobile/confirm_login.html?token={token}";
+
+            // 生成二维码并转换为Base64
+            using (var qrGenerator = new QRCodeGenerator())
+            {
+                var qrCodeData = qrGenerator.CreateQrCode(qrCodeUrl, QRCodeGenerator.ECCLevel.Q);
+                using (var qrCode = new QRCode(qrCodeData))
+                {
+                    using (var bitmap = qrCode.GetGraphic(20))
+                    {
+                        using (var stream = new MemoryStream())
+                        {
+                            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                            byte[] imageBytes = stream.ToArray();
+                            string base64String = Convert.ToBase64String(imageBytes);
+                            Image image = Image.FromStream(stream);
+                            pictureBox1.Image = image;
+                        }
+                    }
+                }
+            }
+
+            string url = "http://115.190.168.152/setQRCode.aspx?token=" + token;
+            string html= PostUrlDefault(url,"","");
+            label2.Text =DateTime.Now.ToString()+ "生成二维码成功："+html; ;
         }
     }
 }

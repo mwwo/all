@@ -87,6 +87,7 @@
     <Compile Include="api.aspx.designer.cs">
       <DependentUpon>api.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="download.aspx.cs">
       <DependentUpon>download.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -102,6 +103,7 @@
       <DependentUpon>KeyHandler.aspx</DependentUpon>
     </Compile>
     <Compile Include="method.cs" />
+    <Compile Include="OpenApi123Pan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

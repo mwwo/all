@@ -1677,6 +1677,7 @@ namespace 主程序202401
         private void button11_Click(object sender, EventArgs e)
         {
             delist_list.Remove(textBox7.Text.Trim());
+            jingtai_list.Remove(textBox7.Text.Trim());
         }
     }
 }

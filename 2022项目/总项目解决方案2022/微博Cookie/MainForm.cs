@@ -100,9 +100,10 @@ namespace 微博Cookie
             Browser.Parent = p2;
             Browser.Dock = DockStyle.Fill;
 
-          
-            //Browser.Navigate("https://passport.weibo.cn/signin/login?entry=mweibo&res=wel");
+
+
             Browser.Navigate("https://sso.zxxk.com/login?service=https%3A%2F%2Fauth.zxxk.com%2Fcallback%3Fcurl%3Dhttps%3A%2F%2Fm.zxxk.com%2Fuser%2F");
+            
             
         }
         string currentDirectory = Directory.GetCurrentDirectory();
@@ -155,6 +156,7 @@ namespace 微博Cookie
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
             Browser.Navigate("https://sso.zxxk.com/login?service=https%3A%2F%2Fauth.zxxk.com%2Fcallback%3Fcurl%3Dhttps%3A%2F%2Fm.zxxk.com%2Fuser%2F");
+            
         }
 
         //杭州阿里云可用

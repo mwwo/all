@@ -42,6 +42,7 @@
             this.打开视频号助手ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.删除账号ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.添加备注ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.复制账号ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -50,18 +51,20 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.复制账号ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.listView1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 143);
+            this.groupBox1.Location = new System.Drawing.Point(0, 159);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(737, 473);
+            this.groupBox1.Size = new System.Drawing.Size(762, 473);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "账号管理";
@@ -83,7 +86,7 @@
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(3, 17);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(731, 453);
+            this.listView1.Size = new System.Drawing.Size(756, 453);
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -130,32 +133,39 @@
             this.添加备注ToolStripMenuItem,
             this.复制账号ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 92);
             // 
             // 打开视频号助手ToolStripMenuItem
             // 
             this.打开视频号助手ToolStripMenuItem.Name = "打开视频号助手ToolStripMenuItem";
-            this.打开视频号助手ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.打开视频号助手ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.打开视频号助手ToolStripMenuItem.Text = "打开视频号助手";
             this.打开视频号助手ToolStripMenuItem.Click += new System.EventHandler(this.打开视频号助手ToolStripMenuItem_Click);
             // 
             // 删除账号ToolStripMenuItem
             // 
             this.删除账号ToolStripMenuItem.Name = "删除账号ToolStripMenuItem";
-            this.删除账号ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.删除账号ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.删除账号ToolStripMenuItem.Text = "删除账号";
             this.删除账号ToolStripMenuItem.Click += new System.EventHandler(this.删除账号ToolStripMenuItem_Click);
             // 
             // 添加备注ToolStripMenuItem
             // 
             this.添加备注ToolStripMenuItem.Name = "添加备注ToolStripMenuItem";
-            this.添加备注ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.添加备注ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.添加备注ToolStripMenuItem.Text = "添加备注";
             this.添加备注ToolStripMenuItem.Click += new System.EventHandler(this.添加备注ToolStripMenuItem_Click);
             // 
+            // 复制账号ToolStripMenuItem
+            // 
+            this.复制账号ToolStripMenuItem.Name = "复制账号ToolStripMenuItem";
+            this.复制账号ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.复制账号ToolStripMenuItem.Text = "复制账号";
+            this.复制账号ToolStripMenuItem.Click += new System.EventHandler(this.复制账号ToolStripMenuItem_Click);
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(30, 24);
+            this.button1.Location = new System.Drawing.Point(358, 88);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(88, 27);
             this.button1.TabIndex = 1;
@@ -166,7 +176,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(145, 31);
+            this.label1.Location = new System.Drawing.Point(186, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 12);
             this.label1.TabIndex = 3;
@@ -174,11 +184,11 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(228, 28);
+            this.textBox1.Location = new System.Drawing.Point(269, 24);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(63, 21);
+            this.textBox1.Size = new System.Drawing.Size(48, 21);
             this.textBox1.TabIndex = 4;
-            this.textBox1.Text = "10";
+            this.textBox1.Text = "30";
             // 
             // timer1
             // 
@@ -186,7 +196,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(623, 79);
+            this.button3.Location = new System.Drawing.Point(452, 88);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(88, 27);
             this.button3.TabIndex = 5;
@@ -207,7 +217,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(28, 86);
+            this.label2.Location = new System.Drawing.Point(186, 144);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 7;
@@ -218,18 +228,27 @@
             this.timer2.Interval = 60000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // 复制账号ToolStripMenuItem
+            // timer3
             // 
-            this.复制账号ToolStripMenuItem.Name = "复制账号ToolStripMenuItem";
-            this.复制账号ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.复制账号ToolStripMenuItem.Text = "复制账号";
-            this.复制账号ToolStripMenuItem.Click += new System.EventHandler(this.复制账号ToolStripMenuItem_Click);
+            this.timer3.Enabled = true;
+            this.timer3.Interval = 3000;
+            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(168, 128);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 8;
+            this.pictureBox1.TabStop = false;
             // 
             // 视频号管理
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(737, 616);
+            this.ClientSize = new System.Drawing.Size(762, 632);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button3);
@@ -244,6 +263,7 @@
             this.Load += new System.EventHandler(this.视频号管理_Load);
             this.groupBox1.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -273,5 +293,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.ToolStripMenuItem 复制账号ToolStripMenuItem;
+        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
